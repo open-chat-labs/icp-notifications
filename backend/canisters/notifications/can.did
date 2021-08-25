@@ -1,0 +1,26 @@
+type AccountIdentifier = text;
+type EmailAddress = text;
+type PhoneNumber = text;
+
+type NotificationTarget =
+    variant {
+        Email: EmailAddress;
+        Sms: PhoneNumber;
+    };
+
+type SubscribeArgs =
+    record {
+        account_identifiers: vec AccountIdentifier;
+        targets: vec NotificationTarget;
+    };
+
+type SubscribeResponse =
+    variant {
+        Success;
+    };
+
+service: {
+    subscribe: (SubscribeArgs) -> (SubscribeResponse);
+    unsubscribe: (UnsubscribeArgs) -> (UnsubscribeResponse);
+    subscriptions: (SubscriptionsArgs) -> (SubscriptionsResponse);
+}

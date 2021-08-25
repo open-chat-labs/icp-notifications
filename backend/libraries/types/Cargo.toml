@@ -1,0 +1,12 @@
+[package]
+name = "types"
+version = "0.1.0"
+authors = ["Hamish Peebles <hamishpeebles@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+candid = "0.7.6"
+ledger-canister = { git = "https://github.com/dfinity/ic", rev = "e362530172c44679313b1b7fca1e90d8967545d8" }
+serde = "1.0.129"
