@@ -17,6 +17,17 @@ type NotificationsSuccessResult =
         notifications: vec Notification;
     };
 
+type RemoveNotificationsArgs =
+    record {
+        up_to_index: nat64;
+    };
+
+type RemoveNotificationsResponse =
+    variant {
+        Success;
+        NotAuthorized;
+    };
+
 type SubscribeArgs =
     record {
         account_identifiers: vec AccountIdentifier;
@@ -59,4 +70,5 @@ service: {
     subscriptions: (SubscriptionsArgs) -> (SubscriptionsResponse) query;
 
     notifications: (NotificationsArgs) -> (NotificationsResponse) query;
+    remove_notifications: (RemoveNotificationsArgs) -> (RemoveNotificationsResponse);
 }

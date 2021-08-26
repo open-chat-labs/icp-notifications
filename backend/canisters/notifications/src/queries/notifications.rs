@@ -33,6 +33,7 @@ fn notifications_impl(args: Args, runtime_state: &RuntimeState) -> Response {
             .data
             .notifications
             .get_range(args.from_index, args.max_results);
+
         Response::Success(SuccessResult { notifications })
     } else {
         Response::NotAuthorized
