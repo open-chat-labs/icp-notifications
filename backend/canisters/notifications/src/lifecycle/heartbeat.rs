@@ -9,7 +9,6 @@ use ledger_canister::{BlockHeight, Transaction};
 use std::cmp::{max, min};
 use std::ops::RangeInclusive;
 use std::sync::Arc;
-use types::Notification;
 
 const MAX_TRANSACTIONS_PER_BATCH: usize = 1000;
 
@@ -132,11 +131,10 @@ fn process_transactions(
             .map(|s| s.targets)
             .flatten()
             .collect();
-        runtime_state.data.notifications.add(Notification {
-            block_height,
-            transaction,
-            targets,
-        });
+        runtime_state
+            .data
+            .notifications
+            .add(block_height, transaction, targets);
     }
     runtime_state
         .data

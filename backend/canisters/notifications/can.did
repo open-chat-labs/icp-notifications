@@ -1,11 +1,20 @@
-type AccountIdentifier = text;
-type EmailAddress = text;
-type PhoneNumber = text;
+import "../../libraries/types/can.did";
 
-type NotificationTarget =
+type NotificationsArgs =
+    record {
+        from_index: nat64;
+        max_results: nat32;
+    };
+
+type NotificationsResponse =
     variant {
-        Email: EmailAddress;
-        Sms: PhoneNumber;
+        Success: NotificationsSuccessResult;
+        NotAuthorized;
+    };
+
+type NotificationsSuccessResult =
+    record {
+        notifications: vec Notification;
     };
 
 type SubscribeArgs =
@@ -19,8 +28,35 @@ type SubscribeResponse =
         Success;
     };
 
+type SubscriptionsArgs =
+    record {
+    };
+
+type SubscriptionsResponse =
+    variant {
+        Success: SubscriptionsSuccessResult;
+    };
+
+type SubscriptionsSuccessResult =
+    record {
+        subscriptions: vec Subscription;
+    };
+
+type UnsubscribeArgs =
+    record {
+        account_identifier: AccountIdentifier;
+        targets: vec NotificationTarget;
+    };
+
+type UnsubscribeResponse =
+    variant {
+        Success;
+    };
+
 service: {
     subscribe: (SubscribeArgs) -> (SubscribeResponse);
     unsubscribe: (UnsubscribeArgs) -> (UnsubscribeResponse);
-    subscriptions: (SubscriptionsArgs) -> (SubscriptionsResponse);
+    subscriptions: (SubscriptionsArgs) -> (SubscriptionsResponse) query;
+
+    notifications: (NotificationsArgs) -> (NotificationsResponse) query;
 }

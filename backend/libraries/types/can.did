@@ -1,0 +1,52 @@
+type AccountIdentifier = text;
+type BlockHeight = nat64;
+type EmailAddress = text;
+type Memo = nat64;
+type PhoneNumber = text;
+
+type ICPTs = record {
+     e8s : nat64;
+};
+
+type Notification =
+    record {
+        index: nat64;
+        block_height: BlockHeight;
+        transaction: Transaction;
+        targets: vec NotificationTarget;
+    };
+
+type NotificationTarget =
+    variant {
+        Email: EmailAddress;
+        Sms: PhoneNumber;
+    };
+
+type Subscription =
+    record {
+        account_identifier: AccountIdentifier;
+        "principal": principal;
+        targets: vec NotificationTarget;
+    };
+
+type Transaction = record {
+    transfer: Transfer;
+    memo: Memo;
+    created_at: BlockHeight;
+};
+
+type Transfer = variant {
+    Burn: record {
+        from: AccountIdentifier;
+        amount: ICPTs;
+    };
+    Mint: record {
+        to: AccountIdentifier;
+        amount: ICPTs;
+    };
+    Send: record {
+        from: AccountIdentifier;
+        to: AccountIdentifier;
+        amount: ICPTs;
+    };
+};

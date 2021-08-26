@@ -3,7 +3,9 @@ use crate::ledger::Ledger;
 use crate::model::notifications::Notifications;
 use crate::model::subscriptions::Subscriptions;
 use crate::model::transaction_import_state::TransactionImportState;
+use candid::Principal;
 use std::cell::RefCell;
+use std::collections::HashSet;
 use std::sync::Arc;
 
 mod env;
@@ -34,4 +36,5 @@ pub struct Data {
     subscriptions: Subscriptions,
     notifications: Notifications,
     transaction_import_state: TransactionImportState,
+    push_service_principals: HashSet<Principal>,
 }
