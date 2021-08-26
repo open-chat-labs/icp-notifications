@@ -1,25 +1,6 @@
 use crate::{RuntimeState, RUNTIME_STATE};
-use candid::CandidType;
 use ic_cdk_macros::query;
-use serde::Deserialize;
-use types::Notification;
-
-#[derive(CandidType, Deserialize, Debug)]
-struct Args {
-    from_index: u64,
-    max_results: u32,
-}
-
-#[derive(CandidType, Deserialize, Debug)]
-enum Response {
-    Success(SuccessResult),
-    NotAuthorized,
-}
-
-#[derive(CandidType, Deserialize, Debug)]
-struct SuccessResult {
-    notifications: Vec<Notification>,
-}
+use notifications_canister_api::notifications::{Response::*, *};
 
 #[query]
 fn notifications(args: Args) -> Response {
@@ -34,8 +15,8 @@ fn notifications_impl(args: Args, runtime_state: &RuntimeState) -> Response {
             .notifications
             .get_range(args.from_index, args.max_results);
 
-        Response::Success(SuccessResult { notifications })
+        Success(SuccessResult { notifications })
     } else {
-        Response::NotAuthorized
+        NotAuthorized
     }
 }

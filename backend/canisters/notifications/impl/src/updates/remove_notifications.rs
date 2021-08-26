@@ -1,18 +1,6 @@
 use crate::{RuntimeState, RUNTIME_STATE};
-use candid::CandidType;
 use ic_cdk_macros::query;
-use serde::Deserialize;
-
-#[derive(CandidType, Deserialize, Debug)]
-struct Args {
-    up_to_index: u64,
-}
-
-#[derive(CandidType, Deserialize, Debug)]
-enum Response {
-    Success,
-    NotAuthorized,
-}
+use notifications_canister_api::remove_notifications::{Response::*, *};
 
 #[query]
 fn remove_notifications(args: Args) -> Response {
@@ -25,8 +13,8 @@ fn remove_notifications_impl(args: Args, runtime_state: &mut RuntimeState) -> Re
     if runtime_state.data.push_service_principals.contains(&caller) {
         runtime_state.data.notifications.remove(args.up_to_index);
 
-        Response::Success
+        Success
     } else {
-        Response::NotAuthorized
+        NotAuthorized
     }
 }

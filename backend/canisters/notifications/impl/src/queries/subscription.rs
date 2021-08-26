@@ -1,25 +1,6 @@
 use crate::{RuntimeState, RUNTIME_STATE};
-use candid::CandidType;
 use ic_cdk_macros::query;
-use ledger_canister::AccountIdentifier;
-use serde::Deserialize;
-use types::Subscription;
-
-#[derive(CandidType, Deserialize, Debug)]
-struct Args {
-    account_identifier: AccountIdentifier,
-}
-
-#[derive(CandidType, Deserialize, Debug)]
-enum Response {
-    Success(SuccessResult),
-    NotFound,
-}
-
-#[derive(CandidType, Deserialize, Debug)]
-struct SuccessResult {
-    subscription: Subscription,
-}
+use notifications_canister_api::subscription::{Response::*, *};
 
 #[query]
 fn subscription(args: Args) -> Response {
@@ -33,8 +14,8 @@ fn subscription_impl(args: Args, runtime_state: &RuntimeState) -> Response {
         .subscriptions
         .get_by_principal(caller, args.account_identifier)
     {
-        Response::Success(SuccessResult { subscription })
+        Success(SuccessResult { subscription })
     } else {
-        Response::NotFound
+        NotFound
     }
 }

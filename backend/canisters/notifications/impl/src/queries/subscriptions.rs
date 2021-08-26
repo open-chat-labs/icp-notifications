@@ -1,21 +1,6 @@
 use crate::{RuntimeState, RUNTIME_STATE};
-use candid::CandidType;
 use ic_cdk_macros::query;
-use serde::Deserialize;
-use types::Subscription;
-
-#[derive(CandidType, Deserialize, Debug)]
-struct Args {}
-
-#[derive(CandidType, Deserialize, Debug)]
-enum Response {
-    Success(SuccessResult),
-}
-
-#[derive(CandidType, Deserialize, Debug)]
-struct SuccessResult {
-    subscriptions: Vec<Subscription>,
-}
+use notifications_canister_api::subscriptions::{Response::*, *};
 
 #[query]
 fn subscriptions(_: Args) -> Response {
@@ -28,5 +13,6 @@ fn subscriptions_impl(runtime_state: &RuntimeState) -> Response {
         .data
         .subscriptions
         .get_all_by_principal(caller);
-    Response::Success(SuccessResult { subscriptions })
+
+    Success(SuccessResult { subscriptions })
 }

@@ -1,20 +1,6 @@
 use crate::{RuntimeState, RUNTIME_STATE};
-use candid::CandidType;
 use ic_cdk_macros::update;
-use ledger_canister::AccountIdentifier;
-use serde::Deserialize;
-use types::NotificationTarget;
-
-#[derive(CandidType, Deserialize, Debug)]
-struct Args {
-    account_identifiers: Vec<AccountIdentifier>,
-    targets: Vec<NotificationTarget>,
-}
-
-#[derive(CandidType, Deserialize, Debug)]
-enum Response {
-    Success,
-}
+use notifications_canister_api::subscribe::{Response::*, *};
 
 #[update]
 fn subscribe(args: Args) -> Response {
@@ -29,5 +15,5 @@ fn subscribe_impl(args: Args, runtime_state: &mut RuntimeState) -> Response {
             .subscriptions
             .add(caller, account_identifier, args.targets.clone());
     }
-    Response::Success
+    Success
 }

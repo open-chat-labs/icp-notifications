@@ -1,5 +1,6 @@
 [workspace]
 members = [
-    "backend/canisters/notifications",
+    "backend/canisters/notifications/api",
+    "backend/canisters/notifications/impl",
     "backend/libraries/types"
 ]
