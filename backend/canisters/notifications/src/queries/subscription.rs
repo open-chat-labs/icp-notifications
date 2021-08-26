@@ -31,7 +31,7 @@ fn subscription_impl(args: Args, runtime_state: &RuntimeState) -> Response {
     if let Some(subscription) = runtime_state
         .data
         .subscriptions
-        .get(caller, args.account_identifier)
+        .get_by_principal(caller, args.account_identifier)
     {
         Response::Success(SuccessResult { subscription })
     } else {

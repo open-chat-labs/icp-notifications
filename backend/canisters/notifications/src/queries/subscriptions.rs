@@ -24,6 +24,9 @@ fn subscriptions(_: Args) -> Response {
 
 fn subscriptions_impl(runtime_state: &RuntimeState) -> Response {
     let caller = runtime_state.env.caller();
-    let subscriptions = runtime_state.data.subscriptions.get_all(caller);
+    let subscriptions = runtime_state
+        .data
+        .subscriptions
+        .get_all_by_principal(caller);
     Response::Success(SuccessResult { subscriptions })
 }

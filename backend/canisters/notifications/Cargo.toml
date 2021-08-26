@@ -5,9 +5,12 @@ authors = ["Hamish Peebles <hamishpeebles@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+async-trait = "0.1.51"
 candid = "0.7.6"
+ic-base-types = { git = "https://github.com/dfinity/ic", rev = "e362530172c44679313b1b7fca1e90d8967545d8" }
 ic-cdk = { git = "https://github.com/hpeebles/cdk-rs.git", rev = "3b7e75520f6c007b84ceff0be376fda017c5e742" }
 ic-cdk-macros = { git = "https://github.com/hpeebles/cdk-rs.git", rev = "3b7e75520f6c007b84ceff0be376fda017c5e742" }
+ic-nns-constants = { git = "https://github.com/dfinity/ic", rev = "e362530172c44679313b1b7fca1e90d8967545d8" }
 ledger-canister = { git = "https://github.com/dfinity/ic", rev = "e362530172c44679313b1b7fca1e90d8967545d8" }
 serde = "1.0.129"
 types = { path = "../../libraries/types" }

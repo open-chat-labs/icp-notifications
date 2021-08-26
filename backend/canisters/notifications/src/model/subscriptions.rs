@@ -11,18 +11,18 @@ pub struct Subscriptions {
 }
 
 impl Subscriptions {
-    pub fn get_all(&self, principal: Principal) -> Vec<Subscription> {
+    pub fn get_all_by_principal(&self, principal: Principal) -> Vec<Subscription> {
         if let Some(account_identifiers) = self.by_principal.get(&principal) {
             account_identifiers
                 .iter()
-                .filter_map(|a| self.get(principal, *a))
+                .filter_map(|a| self.get_by_principal(principal, *a))
                 .collect()
         } else {
             Vec::new()
         }
     }
 
-    pub fn get(
+    pub fn get_by_principal(
         &self,
         principal: Principal,
         account_identifier: AccountIdentifier,
@@ -31,12 +31,27 @@ impl Subscriptions {
             if let Some(targets) = map.get(&principal) {
                 let subscription = Subscription {
                     account_identifier,
+                    principal,
                     targets: targets.iter().cloned().collect(),
                 };
                 return Some(subscription);
             }
         }
         None
+    }
+
+    pub fn get_by_account(&self, account_identifier: AccountIdentifier) -> Vec<Subscription> {
+        if let Some(map) = self.subscriptions.get(&account_identifier) {
+            map.iter()
+                .map(|(principal, targets)| Subscription {
+                    account_identifier,
+                    principal: *principal,
+                    targets: targets.iter().cloned().collect(),
+                })
+                .collect()
+        } else {
+            Vec::new()
+        }
     }
 
     pub fn add(
