@@ -6,6 +6,18 @@ pub trait Environment {
     fn caller(&self) -> Principal;
 }
 
+pub struct CanisterEnvironment {}
+
+impl Environment for CanisterEnvironment {
+    fn now(&self) -> u64 {
+        ic_cdk::api::time()
+    }
+
+    fn caller(&self) -> Principal {
+        ic_cdk::caller()
+    }
+}
+
 #[cfg(test)]
 pub struct TestEnvironment {
     pub now: u64,
