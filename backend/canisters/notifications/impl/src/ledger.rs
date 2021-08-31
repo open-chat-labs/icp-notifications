@@ -12,7 +12,6 @@ pub trait Ledger {
     ) -> Result<GetBlocksRes, String>;
 }
 
-#[derive(Clone)]
 pub struct LedgerCanister {}
 
 #[async_trait]
