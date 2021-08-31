@@ -127,3 +127,73 @@ impl Subscriptions {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use ledger_canister::Subaccount;
+
+    const PRINCIPAL1: Principal = Principal::from_slice(&[1]);
+    const PRINCIPAL2: Principal = Principal::from_slice(&[2]);
+
+    #[test]
+    fn add_then_get_by_principal() {
+        let mut subscriptions = Subscriptions::default();
+
+        let account_identifier1 = AccountIdentifier::new(PRINCIPAL1.into(), None);
+        let account_identifier2 =
+            AccountIdentifier::new(PRINCIPAL1.into(), Some(build_sub_account(1)));
+
+        let target1 = NotificationTarget::Email("1@1.com".to_string());
+        let target2 = NotificationTarget::Email("2@2.com".to_string());
+        let target3 = NotificationTarget::Email("3@3.com".to_string());
+
+        subscriptions.add(PRINCIPAL1, account_identifier1, vec![target1]);
+        subscriptions.add(PRINCIPAL1, account_identifier2, vec![target2.clone()]);
+        subscriptions.add(
+            PRINCIPAL2,
+            AccountIdentifier::new(PRINCIPAL2.into(), None),
+            vec![target3],
+        );
+
+        if let Some(subscription) = subscriptions.get_by_principal(PRINCIPAL1, account_identifier2)
+        {
+            assert_eq!(subscription.principal, PRINCIPAL1);
+            assert_eq!(subscription.account_identifier, account_identifier2);
+            assert_eq!(subscription.targets, vec![target2]);
+        } else {
+            panic!("Subscription was not returned");
+        }
+    }
+
+    #[test]
+    fn add_then_get_by_account() {
+        let mut subscriptions = Subscriptions::default();
+
+        let account_identifier1 = AccountIdentifier::new(PRINCIPAL1.into(), None);
+        let account_identifier2 = AccountIdentifier::new(PRINCIPAL2.into(), None);
+
+        let target1 = NotificationTarget::Email("1@1.com".to_string());
+        let target2 = NotificationTarget::Email("2@2.com".to_string());
+        let target3 = NotificationTarget::Email("3@3.com".to_string());
+
+        subscriptions.add(PRINCIPAL1, account_identifier1, vec![target1]);
+        subscriptions.add(PRINCIPAL1, account_identifier2, vec![target2.clone()]);
+        subscriptions.add(PRINCIPAL2, account_identifier2, vec![target3.clone()]);
+
+        let matches = subscriptions.get_by_account(account_identifier2);
+        assert_eq!(matches.len(), 2);
+        assert_eq!(matches[0].principal, PRINCIPAL1);
+        assert_eq!(matches[0].account_identifier, account_identifier2);
+        assert_eq!(matches[0].targets, vec![target2]);
+        assert_eq!(matches[1].principal, PRINCIPAL2);
+        assert_eq!(matches[1].account_identifier, account_identifier2);
+        assert_eq!(matches[1].targets, vec![target3]);
+    }
+
+    fn build_sub_account(index: u8) -> Subaccount {
+        let mut sub_account: [u8; 32] = [0; 32];
+        sub_account[31] = index;
+        Subaccount(sub_account)
+    }
+}
