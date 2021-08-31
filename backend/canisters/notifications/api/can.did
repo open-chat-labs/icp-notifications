@@ -1,4 +1,4 @@
-import "../../libraries/types/can.did";
+import "../../../libraries/types/can.did";
 
 type NotificationsArgs =
     record {

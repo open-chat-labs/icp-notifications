@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "notifications": {
+      "type": "custom",
+      "candid": "backend/canisters/notifications/api/can.did",
+      "wasm": "target/wasm32-unknown-unknown/release/notifications_canister_impl-opt.wasm",
+      "build": "./generate-wasm.sh notifications_canister_impl"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    },
+    "ic": {
+      "bind": "https://ic0.app/",
+      "type": "persistent"
+    }
+  },
+  "version": 1
+}
