@@ -3,7 +3,7 @@ use ledger_canister::{BlockHeight, Transaction};
 use types::Error;
 
 #[async_trait]
-pub trait SmsSender {
+pub trait SmsSender: Send + Sync {
     async fn send(
         &self,
         phone_number: String,
