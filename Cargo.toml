@@ -2,5 +2,8 @@
 members = [
     "backend/canisters/notifications/api",
     "backend/canisters/notifications/impl",
+    "backend/external/notification_sender/aws",
+    "backend/external/notification_sender/cli",
+    "backend/external/notification_sender/core",
     "backend/libraries/types"
 ]
