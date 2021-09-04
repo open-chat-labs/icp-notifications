@@ -31,9 +31,24 @@ impl SnsClient {
 impl SmsSender for SnsClient {
     async fn send(
         &self,
-        _phone_number: String,
-        _transaction_details: TransactionDetails,
+        phone_number: String,
+        transaction_details: TransactionDetails,
     ) -> Result<(), Error> {
-        todo!()
+        self.client
+            .publish()
+            .set_topic_arn(Some(self.sns_topic_arn.clone()))
+            .phone_number(phone_number)
+            .subject("ICP transaction notifications")
+            .message(format!(
+                "TransactionIndex: {}\nFrom: {}\nTo: {}\nAmount: {}",
+                transaction_details.transaction_index,
+                transaction_details.from,
+                transaction_details.to,
+                transaction_details.amount,
+            ))
+            .send()
+            .await?;
+
+        Ok(())
     }
 }
