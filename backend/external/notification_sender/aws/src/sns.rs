@@ -1,24 +1,29 @@
 use async_trait::async_trait;
 use aws_sdk_sns::Client;
-use ledger_canister::{BlockHeight, Transaction};
 use log::info;
-use notification_sender::email_sender::EmailSender;
 use notification_sender::sms_sender::SmsSender;
+use notification_sender::transaction_details::TransactionDetails;
 use types::Error;
 
 pub struct SnsClient {
     client: Client,
+    sns_topic_arn: String,
 }
 
 impl SnsClient {
-    pub fn build() -> SnsClient {
+    pub fn build() -> Result<SnsClient, Error> {
         let config = aws_sdk_sns::Config::builder().build();
 
         let client = Client::from_conf(config);
 
+        let sns_topic_arn = dotenv::var("SNS_TOPIC_ARN")?;
+
         info!("SnsClient created");
 
-        SnsClient { client }
+        Ok(SnsClient {
+            client,
+            sns_topic_arn,
+        })
     }
 }
 
@@ -27,20 +32,7 @@ impl SmsSender for SnsClient {
     async fn send(
         &self,
         _phone_number: String,
-        _block_height: BlockHeight,
-        _transaction: Transaction,
-    ) -> Result<(), Error> {
-        todo!()
-    }
-}
-
-#[async_trait]
-impl EmailSender for SnsClient {
-    async fn send(
-        &self,
-        _email_address: String,
-        _block_height: BlockHeight,
-        _transaction: Transaction,
+        _transaction_details: TransactionDetails,
     ) -> Result<(), Error> {
         todo!()
     }

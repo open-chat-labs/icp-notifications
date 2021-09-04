@@ -1,12 +1,12 @@
 use async_trait::async_trait;
-use ledger_canister::{BlockHeight, Transaction};
 use notification_sender::email_sender::EmailSender;
+use notification_sender::transaction_details::TransactionDetails;
 use std::borrow::BorrowMut;
 use std::sync::Mutex;
 use types::Error;
 
 pub struct DummyEmailSender {
-    emails_sent: Mutex<Vec<(String, BlockHeight, Transaction)>>,
+    emails_sent: Mutex<Vec<(String, TransactionDetails)>>,
 }
 
 impl DummyEmailSender {
@@ -22,14 +22,13 @@ impl EmailSender for DummyEmailSender {
     async fn send(
         &self,
         email_address: String,
-        block_height: BlockHeight,
-        transaction: Transaction,
+        transaction_details: TransactionDetails,
     ) -> Result<(), Error> {
         match self.emails_sent.lock() {
             Ok(mut mutex) => {
                 mutex
                     .borrow_mut()
-                    .push((email_address, block_height, transaction));
+                    .push((email_address, transaction_details));
                 Ok(())
             }
             Err(error) => Err(error.to_string().into()),

@@ -1,9 +1,11 @@
 mod dynamodb;
+mod ses;
 
 #[allow(dead_code)]
 mod sns;
 
 use crate::dynamodb::DynamoDbClient;
+use crate::ses::SesClient;
 use crate::sns::SnsClient;
 use candid::Principal;
 use lambda_runtime::{handler_fn, Context};
@@ -53,8 +55,9 @@ async fn handler(request: Request, _: Context) -> Result<(), Error> {
 
     match request.run_mode {
         Mode::SendNotifications => {
-            let sns_client = SnsClient::build();
-            send_notifications::run(&ic_agent, &dynamodb_client, &sns_client, &sns_client).await
+            let sns_client = SnsClient::build()?;
+            let ses_client = SesClient::build()?;
+            send_notifications::run(&ic_agent, &dynamodb_client, &sns_client, &ses_client).await
         }
         Mode::RemoveNotifications => remove_notifications::run(&ic_agent, &dynamodb_client).await,
     }

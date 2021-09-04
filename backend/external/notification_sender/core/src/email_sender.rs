@@ -1,5 +1,5 @@
+use crate::transaction_details::TransactionDetails;
 use async_trait::async_trait;
-use ledger_canister::{BlockHeight, Transaction};
 use types::Error;
 
 #[async_trait]
@@ -7,7 +7,6 @@ pub trait EmailSender: Send + Sync {
     async fn send(
         &self,
         email_address: String,
-        block_height: BlockHeight,
-        transaction: Transaction,
+        transaction_details: TransactionDetails,
     ) -> Result<(), Error>;
 }

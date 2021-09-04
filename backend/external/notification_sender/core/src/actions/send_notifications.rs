@@ -2,6 +2,7 @@ use crate::email_sender::EmailSender;
 use crate::index_store::IndexStore;
 use crate::notification_reader::NotificationReader;
 use crate::sms_sender::SmsSender;
+use crate::transaction_details::TransactionDetails;
 use futures::future;
 use types::{Error, NotificationTarget};
 
@@ -23,14 +24,14 @@ pub async fn run(
             .notifications
             .into_iter()
             .flat_map(|n| {
-                let block_height = n.block_height;
-                let transaction = n.transaction;
+                let transaction_details: TransactionDetails =
+                    (n.block_height, n.transaction).into();
                 n.targets.into_iter().map(move |t| match t {
                     NotificationTarget::Sms(phone_number) => {
-                        sms_sender.send(phone_number, block_height, transaction.clone())
+                        sms_sender.send(phone_number, transaction_details.clone())
                     }
                     NotificationTarget::Email(email_address) => {
-                        email_sender.send(email_address, block_height, transaction.clone())
+                        email_sender.send(email_address, transaction_details.clone())
                     }
                 })
             })

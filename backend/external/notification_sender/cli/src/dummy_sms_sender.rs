@@ -1,12 +1,12 @@
 use async_trait::async_trait;
-use ledger_canister::{BlockHeight, Transaction};
 use notification_sender::sms_sender::SmsSender;
+use notification_sender::transaction_details::TransactionDetails;
 use std::borrow::BorrowMut;
 use std::sync::Mutex;
 use types::Error;
 
 pub struct DummySmsSender {
-    sms_messages_sent: Mutex<Vec<(String, BlockHeight, Transaction)>>,
+    sms_messages_sent: Mutex<Vec<(String, TransactionDetails)>>,
 }
 
 impl DummySmsSender {
@@ -22,14 +22,11 @@ impl SmsSender for DummySmsSender {
     async fn send(
         &self,
         phone_number: String,
-        block_height: BlockHeight,
-        transaction: Transaction,
+        transaction_details: TransactionDetails,
     ) -> Result<(), Error> {
         match self.sms_messages_sent.lock() {
             Ok(mut mutex) => {
-                mutex
-                    .borrow_mut()
-                    .push((phone_number, block_height, transaction));
+                mutex.borrow_mut().push((phone_number, transaction_details));
                 Ok(())
             }
             Err(error) => Err(error.to_string().into()),

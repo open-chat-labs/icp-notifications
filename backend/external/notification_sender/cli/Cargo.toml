@@ -11,7 +11,6 @@ async-trait = "0.1.51"
 candid = "0.7.6"
 dotenv = "0.15.0"
 env_logger = "0.9.0"
-ledger-canister = { git = "https://github.com/dfinity/ic", rev = "e362530172c44679313b1b7fca1e90d8967545d8" }
 notification_sender = { path = "../core" }
 tokio = { version = "1.10.0", features = ["macros", "time"] }
 types = { path = "../../../libraries/types" }
