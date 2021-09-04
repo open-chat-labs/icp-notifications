@@ -17,16 +17,15 @@ mod ingest_transactions {
 
     pub async fn run() {
         if let PrepareResult::Ready(ledger, maybe_synced_up_to) =
-            RUNTIME_STATE.with(|state| prepare(state.borrow_mut().as_mut().unwrap()))
+            RUNTIME_STATE.with(|state| prepare(&mut state.borrow_mut()))
         {
             if let Some(synced_up_to) = maybe_synced_up_to {
                 let transactions = get_transactions(ledger, synced_up_to + 1)
                     .await
                     .expect("Failed to get transactions");
 
-                RUNTIME_STATE.with(|state| {
-                    process_transactions(transactions, state.borrow_mut().as_mut().unwrap())
-                });
+                RUNTIME_STATE
+                    .with(|state| process_transactions(transactions, &mut state.borrow_mut()));
             } else {
                 // This will only happen on the first iteration. We set synced_up_to to be the current
                 // tip_of_chain so that subsequent processing continues from there since we don't care
@@ -37,9 +36,7 @@ mod ingest_transactions {
                     .expect("Failed to call 'tip_of_chain'")
                     .tip_index;
 
-                RUNTIME_STATE.with(|state| {
-                    set_synced_up_to(tip_of_chain, state.borrow_mut().as_mut().unwrap())
-                });
+                RUNTIME_STATE.with(|state| set_synced_up_to(tip_of_chain, &mut state.borrow_mut()));
             }
         }
     }

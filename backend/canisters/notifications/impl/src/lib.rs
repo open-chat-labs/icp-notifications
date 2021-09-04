@@ -1,5 +1,5 @@
-use crate::env::Environment;
-use crate::ledger::Ledger;
+use crate::env::{EmptyEnvironment, Environment};
+use crate::ledger::{EmptyLedger, Ledger};
 use crate::model::notifications::Notifications;
 use crate::model::subscriptions::Subscriptions;
 use crate::model::transaction_import_state::TransactionImportState;
@@ -16,7 +16,7 @@ mod queries;
 mod updates;
 
 thread_local! {
-    pub static RUNTIME_STATE: RefCell<Option<RuntimeState>> = RefCell::default();
+    pub static RUNTIME_STATE: RefCell<RuntimeState> = RefCell::default();
 }
 
 pub struct RuntimeState {
@@ -28,6 +28,16 @@ pub struct RuntimeState {
 impl RuntimeState {
     pub fn new(env: Box<dyn Environment>, data: Data, ledger: Arc<dyn Ledger>) -> RuntimeState {
         RuntimeState { env, data, ledger }
+    }
+}
+
+impl Default for RuntimeState {
+    fn default() -> Self {
+        RuntimeState {
+            env: Box::new(EmptyEnvironment {}),
+            data: Data::default(),
+            ledger: Arc::new(EmptyLedger {}),
+        }
     }
 }
 

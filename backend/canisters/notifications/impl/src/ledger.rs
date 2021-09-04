@@ -24,3 +24,16 @@ impl Ledger for LedgerCanister {
         todo!()
     }
 }
+
+pub struct EmptyLedger {}
+
+#[async_trait]
+impl Ledger for EmptyLedger {
+    async fn tip_of_chain(&self) -> Result<TipOfChainRes, String> {
+        unimplemented!()
+    }
+
+    async fn get_blocks_since(&self, _start: u64, _length: usize) -> Result<GetBlocksRes, String> {
+        unimplemented!()
+    }
+}

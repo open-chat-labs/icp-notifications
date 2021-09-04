@@ -4,7 +4,7 @@ use notifications_canister_api::unsubscribe::{Response::*, *};
 
 #[update]
 fn unsubscribe(args: Args) -> Response {
-    RUNTIME_STATE.with(|state| unsubscribe_impl(args, state.borrow_mut().as_mut().unwrap()))
+    RUNTIME_STATE.with(|state| unsubscribe_impl(args, &mut state.borrow_mut()))
 }
 
 fn unsubscribe_impl(args: Args, runtime_state: &mut RuntimeState) -> Response {

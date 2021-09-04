@@ -4,8 +4,7 @@ use notifications_canister_api::remove_notifications::{Response::*, *};
 
 #[query]
 fn remove_notifications(args: Args) -> Response {
-    RUNTIME_STATE
-        .with(|state| remove_notifications_impl(args, state.borrow_mut().as_mut().unwrap()))
+    RUNTIME_STATE.with(|state| remove_notifications_impl(args, &mut state.borrow_mut()))
 }
 
 fn remove_notifications_impl(args: Args, runtime_state: &mut RuntimeState) -> Response {

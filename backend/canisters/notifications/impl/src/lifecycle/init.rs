@@ -11,5 +11,5 @@ fn init() {
     let ledger = LedgerCanister {};
     let runtime_state = RuntimeState::new(Box::new(env), data, Arc::new(ledger));
 
-    RUNTIME_STATE.with(|state| *state.borrow_mut() = Some(runtime_state));
+    RUNTIME_STATE.with(|state| *state.borrow_mut() = runtime_state);
 }

@@ -4,7 +4,7 @@ use notifications_canister_api::subscriptions::{Response::*, *};
 
 #[query]
 fn subscriptions(_: Args) -> Response {
-    RUNTIME_STATE.with(|state| subscriptions_impl(state.borrow().as_ref().unwrap()))
+    RUNTIME_STATE.with(|state| subscriptions_impl(&state.borrow()))
 }
 
 fn subscriptions_impl(runtime_state: &RuntimeState) -> Response {

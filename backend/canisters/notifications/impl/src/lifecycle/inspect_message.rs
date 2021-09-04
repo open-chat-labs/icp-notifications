@@ -6,7 +6,7 @@ fn inspect_message() {
     let method_name = ic_cdk::api::call::method_name();
 
     if &method_name[..] == "remove_notifications" {
-        RUNTIME_STATE.with(|state| accept_if_push_service(state.borrow().as_ref().unwrap()));
+        RUNTIME_STATE.with(|state| accept_if_push_service(&state.borrow()));
     }
 }
 

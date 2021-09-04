@@ -4,7 +4,7 @@ use notifications_canister_api::notifications::{Response::*, *};
 
 #[query]
 fn notifications(args: Args) -> Response {
-    RUNTIME_STATE.with(|state| notifications_impl(args, state.borrow().as_ref().unwrap()))
+    RUNTIME_STATE.with(|state| notifications_impl(args, &state.borrow()))
 }
 
 fn notifications_impl(args: Args, runtime_state: &RuntimeState) -> Response {

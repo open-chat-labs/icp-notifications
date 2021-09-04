@@ -18,6 +18,18 @@ impl Environment for CanisterEnvironment {
     }
 }
 
+pub struct EmptyEnvironment {}
+
+impl Environment for EmptyEnvironment {
+    fn now(&self) -> u64 {
+        unimplemented!()
+    }
+
+    fn caller(&self) -> Principal {
+        unimplemented!()
+    }
+}
+
 #[cfg(test)]
 pub struct TestEnvironment {
     pub now: u64,
