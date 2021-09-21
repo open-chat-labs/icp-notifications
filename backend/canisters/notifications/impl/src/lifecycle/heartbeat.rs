@@ -16,9 +16,9 @@ mod ingest_transactions {
     use super::*;
 
     pub async fn run() {
-        if let PrepareResult::Ready(ledger, maybe_synced_up_to) =
-            RUNTIME_STATE.with(|state| prepare(&mut state.borrow_mut()))
-        {
+        let prepare_result = RUNTIME_STATE.with(|state| prepare(&mut state.borrow_mut()));
+
+        if let PrepareResult::Ready(ledger, maybe_synced_up_to) = prepare_result {
             if let Some(synced_up_to) = maybe_synced_up_to {
                 let transactions = get_transactions(ledger, synced_up_to + 1)
                     .await
@@ -67,6 +67,7 @@ mod ingest_transactions {
             .data
             .transaction_import_state
             .set_synced_up_to(synced_up_to);
+
         runtime_state
             .data
             .transaction_import_state
@@ -97,29 +98,28 @@ mod ingest_transactions {
     ) {
         for (block_height, transaction) in transactions.into_iter() {
             let recipient = match &transaction.transfer {
-                Mint { to, amount: _ } => to,
-                Send {
-                    from: _,
-                    to,
-                    amount: _,
-                    fee: _,
-                } => to,
+                Mint { to, .. } => to,
+                Send { to, .. } => to,
                 _ => continue,
             };
+
             let subscriptions = runtime_state.data.subscriptions.get_by_account(*recipient);
             if subscriptions.is_empty() {
                 continue;
             }
+
             let targets = subscriptions
                 .into_iter()
                 .map(|s| s.targets)
                 .flatten()
                 .collect();
+
             runtime_state
                 .data
                 .notifications
                 .add(block_height, transaction, targets);
         }
+
         runtime_state
             .data
             .transaction_import_state
