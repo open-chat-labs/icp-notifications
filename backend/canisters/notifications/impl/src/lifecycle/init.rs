@@ -6,6 +6,8 @@ use std::sync::Arc;
 
 #[init]
 fn init() {
+    ic_cdk::setup();
+
     let env = CanisterEnvironment {};
     let data = Data::default();
     let ledger = LedgerCanister {};

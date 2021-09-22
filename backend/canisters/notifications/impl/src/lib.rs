@@ -3,7 +3,8 @@ use crate::ledger::{EmptyLedger, Ledger};
 use crate::model::notifications::Notifications;
 use crate::model::subscriptions::Subscriptions;
 use crate::model::transaction_import_state::TransactionImportState;
-use candid::Principal;
+use candid::{CandidType, Principal};
+use serde::Deserialize;
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::sync::Arc;
@@ -41,7 +42,7 @@ impl Default for RuntimeState {
     }
 }
 
-#[derive(Default)]
+#[derive(CandidType, Deserialize, Default)]
 pub struct Data {
     subscriptions: Subscriptions,
     notifications: Notifications,

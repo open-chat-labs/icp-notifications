@@ -1,6 +1,8 @@
+use candid::CandidType;
 use ledger_canister::BlockHeight;
+use serde::Deserialize;
 
-#[derive(Default)]
+#[derive(CandidType, Deserialize, Default)]
 pub struct TransactionImportState {
     in_progress: bool,
     synced_up_to: Option<BlockHeight>,

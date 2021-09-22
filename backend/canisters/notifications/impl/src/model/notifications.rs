@@ -1,8 +1,10 @@
+use candid::CandidType;
 use ledger_canister::{BlockHeight, Transaction};
+use serde::Deserialize;
 use std::collections::VecDeque;
 use types::{Notification, NotificationTarget};
 
-#[derive(Default)]
+#[derive(CandidType, Deserialize, Default)]
 pub struct Notifications {
     notifications: VecDeque<Notification>,
     latest_notification_index: u64,

@@ -1,10 +1,11 @@
-use candid::Principal;
+use candid::{CandidType, Principal};
 use ledger_canister::AccountIdentifier;
+use serde::Deserialize;
 use std::collections::hash_map::Entry::{Occupied, Vacant};
 use std::collections::{HashMap, HashSet};
 use types::{NotificationTarget, Subscription};
 
-#[derive(Default)]
+#[derive(CandidType, Deserialize, Default)]
 pub struct Subscriptions {
     subscriptions: HashMap<AccountIdentifier, HashMap<Principal, HashSet<NotificationTarget>>>,
     by_principal: HashMap<Principal, HashSet<AccountIdentifier>>,
