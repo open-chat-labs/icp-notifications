@@ -1148,18 +1148,20 @@ dependencies = [
 
 [[package]]
 name = "ic-cdk"
-version = "0.3.1"
-source = "git+https://github.com/hpeebles/cdk-rs.git?rev=3b7e75520f6c007b84ceff0be376fda017c5e742#3b7e75520f6c007b84ceff0be376fda017c5e742"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0584eb389b9182ee3be53a44f0123d478426a7ef4fcc2d98c2e3716f654e1c92"
 dependencies = [
  "candid",
- "cfg-if 0.1.10",
+ "cfg-if 1.0.0",
  "serde",
 ]
 
 [[package]]
 name = "ic-cdk-macros"
-version = "0.3.1"
-source = "git+https://github.com/hpeebles/cdk-rs.git?rev=3b7e75520f6c007b84ceff0be376fda017c5e742#3b7e75520f6c007b84ceff0be376fda017c5e742"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0af2789a609a78e5e18a01792c9ee1237d45b4a86824ad7ccde80edf279ae230"
 dependencies = [
  "candid",
  "ic-cdk",
